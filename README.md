@@ -5,7 +5,7 @@ One-command setup script for running **Pterodactyl Panel** inside Codespaces.
 ---
 
 ## 📜 Credits
-- **Base Setup:** Hopingoboy  
+- **Base Setup:** Hopingboy  
 - **Automation Script:** Ray
 
 ---
