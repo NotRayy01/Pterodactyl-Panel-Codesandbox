@@ -16,6 +16,9 @@ echo "Pterodactyl Panel Auto Setup by Ray"
 echo "------------------------------------"
 sleep 2
 
+# Install docker-compose
+apt install docker-compose -y
+
 # === Start Installation ===
 mkdir -p pterodactyl/panel
 cd pterodactyl/panel || exit
