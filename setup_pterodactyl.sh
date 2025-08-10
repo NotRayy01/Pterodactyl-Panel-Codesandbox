@@ -1,34 +1,42 @@
 #!/bin/bash
 
-# Variables
-DB_PASS="StrongDBPass123"
-DB_ROOT_PASS="StrongRootPass123"
-APP_URL="https://pterodactyl.example.com"
-TIMEZONE="Asia/Kolkata"
-EMAIL="noreply@example.com"
+# === ASCII Banner ===
+echo -e "\033[1;36m"
+cat << "EOF"
+██████╗  █████╗ ██╗   ██╗
+██╔══██╗██╔══██╗╚██╗ ██╔╝
+██████╔╝███████║ ╚████╔╝ 
+██╔═══╝ ██╔══██║  ╚██╔╝  
+██║     ██║  ██║   ██║   
+╚═╝     ╚═╝  ╚═╝   ╚═╝   
+EOF
+echo -e "\033[0m"
 
-# Create folders
+echo "Pterodactyl Panel Auto Setup by Ray"
+echo "------------------------------------"
+sleep 2
+
+# === Start Installation ===
 mkdir -p pterodactyl/panel
 cd pterodactyl/panel || exit
 
-# Create docker-compose.yml
-cat > docker-compose.yml <<EOL
+cat << 'YML' > docker-compose.yml
 version: '3.8'
 
 x-common:
   database:
     &db-environment
-    MYSQL_PASSWORD: &db-password "${DB_PASS}"
-    MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASS}"
+    MYSQL_PASSWORD: &db-password "CHANGE_ME"
+    MYSQL_ROOT_PASSWORD: "CHANGE_ME_TOO"
   panel:
     &panel-environment
-    APP_URL: "${APP_URL}"
-    APP_TIMEZONE: "${TIMEZONE}"
-    APP_SERVICE_AUTHOR: "${EMAIL}"
+    APP_URL: "https://pterodactyl.example.com"
+    APP_TIMEZONE: "Asia/Kolkata"
+    APP_SERVICE_AUTHOR: "noreply@example.com"
     TRUSTED_PROXIES: "*"
   mail:
     &mail-environment
-    MAIL_FROM: "${EMAIL}"
+    MAIL_FROM: "noreply@example.com"
     MAIL_DRIVER: "smtp"
     MAIL_HOST: "mail"
     MAIL_PORT: "1025"
@@ -83,13 +91,9 @@ networks:
     ipam:
       config:
         - subnet: 172.20.0.0/16
-EOL
+YML
 
-# Create necessary data folders
 mkdir -p ./data/{database,var,nginx,certs,logs}
 
-# Run docker compose
 docker-compose up -d
-
-# Create first user interactively
 docker-compose run --rm panel php artisan p:user:make
